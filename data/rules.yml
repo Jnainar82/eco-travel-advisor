@@ -1,0 +1,98 @@
+version: "3.1"
+rules:
+  - rule: Greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+  - rule: Say goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+  - rule: Bot challenge
+    steps:
+      - intent: bot_challenge
+      - action: utter_iamabot
+  - rule: Out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope
+  - rule: Greenwashing FAQ
+    condition:
+      - active_loop: null
+    steps:
+      - intent: ask_greenwashing
+      - action: utter_greenwashing_faq
+  - rule: Privacy FAQ
+    condition:
+      - active_loop: null
+    steps:
+      - intent: ask_privacy
+      - action: utter_privacy_faq
+  - rule: FAQ during form then resume (greenwashing)
+    condition:
+      - active_loop: trip_form
+    steps:
+      - intent: ask_greenwashing
+      - action: utter_greenwashing_faq
+      - action: trip_form
+      - active_loop: trip_form
+  - rule: FAQ during form then resume (privacy)
+    condition:
+      - active_loop: trip_form
+    steps:
+      - intent: ask_privacy
+      - action: utter_privacy_faq
+      - action: trip_form
+      - active_loop: trip_form
+  - rule: Activate trip form
+    steps:
+      - intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form
+  - rule: Submit trip form
+    condition:
+      - active_loop: trip_form
+    steps:
+      - action: trip_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_search_options
+      - action: utter_offer_more
+  - rule: GPS location during form
+    condition:
+      - active_loop: trip_form
+    steps:
+      - intent: share_location
+      - action: action_resolve_location
+      - action: trip_form
+      - active_loop: trip_form
+  - rule: GPS location outside form
+    condition:
+      - active_loop: null
+    steps:
+      - intent: share_location
+      - action: action_resolve_location
+      - action: utter_greet
+  - rule: Human request (any time) asks consent
+    steps:
+      - intent: request_human
+      - action: action_deactivate_loop
+      - active_loop: null
+      - action: utter_ask_handover_consent
+  - rule: Consent given -> handover
+    steps:
+      - action: utter_ask_handover_consent
+      - action: action_listen
+      - intent: affirm
+      - action: action_handover
+  - rule: Consent refused
+    steps:
+      - action: utter_ask_handover_consent
+      - action: action_listen
+      - intent: deny
+      - action: utter_handover_declined
+  - rule: Two-stage fallback (stages 1-3 handled in action)
+    steps:
+      - intent: nlu_fallback
+      - action: action_default_fallback

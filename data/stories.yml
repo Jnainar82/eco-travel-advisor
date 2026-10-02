@@ -1,0 +1,48 @@
+version: "3.1"
+stories:
+  - story: Happy path - eco-first city break
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: action_search_options
+      - action: utter_offer_more
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - story: Results then escalate to human (consent given)
+    steps:
+      - intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: action_search_options
+      - action: utter_offer_more
+      - intent: request_human
+      - action: action_deactivate_loop
+      - active_loop: null
+      - action: utter_ask_handover_consent
+      - intent: affirm
+      - action: action_handover
+
+  - story: Plan another trip after results
+    steps:
+      - action: utter_offer_more
+      - intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form
+
+  - story: Greenwashing question then trip
+    steps:
+      - intent: ask_greenwashing
+      - action: utter_greenwashing_faq
+      - intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form

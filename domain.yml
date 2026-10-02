@@ -1,0 +1,203 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - plan_trip
+  - inform
+  - share_location
+  - request_human
+  - ask_greenwashing
+  - ask_privacy
+  - bot_challenge
+  - out_of_scope
+  - nlu_fallback
+
+entities:
+  - origin
+  - destination
+  - travel_date
+  - nights
+  - budget
+  - sustainability_level
+  - trip_type
+  - lat
+  - lon
+
+slots:
+  trip_type:
+    type: categorical
+    values: [city_break, rural_eco_tour, business_trip]
+    mappings:
+      - type: from_entity
+        entity: trip_type
+  origin:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: origin
+      - type: from_text
+        conditions:
+          - active_loop: trip_form
+            requested_slot: origin
+        not_intent: [request_human, share_location, out_of_scope, ask_privacy, ask_greenwashing]
+  destination:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: destination
+      - type: from_text
+        conditions:
+          - active_loop: trip_form
+            requested_slot: destination
+        not_intent: [request_human, share_location, out_of_scope, ask_privacy, ask_greenwashing]
+  travel_date:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: travel_date
+      - type: from_text
+        conditions:
+          - active_loop: trip_form
+            requested_slot: travel_date
+        not_intent: [request_human, out_of_scope, ask_privacy, ask_greenwashing]
+  nights:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: nights
+      - type: from_text
+        conditions:
+          - active_loop: trip_form
+            requested_slot: nights
+        not_intent: [request_human, out_of_scope, ask_privacy, ask_greenwashing]
+  budget:
+    type: float
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: budget
+      - type: from_text
+        conditions:
+          - active_loop: trip_form
+            requested_slot: budget
+        not_intent: [request_human, out_of_scope, ask_privacy, ask_greenwashing]
+  origin_geo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  destination_geo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  budget_currency:
+    type: text
+    influence_conversation: false
+    initial_value: EUR
+    mappings:
+      - type: custom
+  sustainability_level:
+    type: categorical
+    values: [low, medium, high]
+    mappings:
+      - type: from_entity
+        entity: sustainability_level
+
+forms:
+  trip_form:
+    required_slots:
+      - trip_type
+      - origin
+      - destination
+      - travel_date
+      - nights
+      - budget
+      - sustainability_level
+
+actions:
+  - validate_trip_form
+  - action_search_options
+  - action_resolve_location
+  - action_handover
+  - action_default_fallback
+
+responses:
+  utter_greet:
+    - text: "Hi, I'm the Eco-Travel Advisor. I can compare the carbon footprint of ways to get to your destination and suggest lower-impact stays. Want to plan a trip?"
+      buttons:
+        - {title: "Plan a trip", payload: "/plan_trip"}
+        - {title: "How do you avoid greenwashing?", payload: "/ask_greenwashing"}
+        - {title: "Talk to a human", payload: "/request_human"}
+  utter_goodbye:
+    - text: "Goodbye, and safe travels."
+  utter_iamabot:
+    - text: "I'm a virtual assistant. A human advisor is available whenever you ask for one."
+  utter_out_of_scope:
+    - text: "I can only help with planning lower-carbon trips. Would you like to plan one, or talk to a human advisor?"
+      buttons:
+        - {title: "Plan a trip", payload: "/plan_trip"}
+        - {title: "Talk to a human", payload: "/request_human"}
+  utter_ask_trip_type:
+    - text: "What kind of trip is it?"
+      buttons:
+        - {title: "City break", payload: '/inform{"trip_type":"city_break"}'}
+        - {title: "Rural eco-tour", payload: '/inform{"trip_type":"rural_eco_tour"}'}
+        - {title: "Business trip", payload: '/inform{"trip_type":"business_trip"}'}
+  utter_ask_origin:
+    - text: "Where are you travelling from? Type a city, or use the location button."
+  utter_ask_destination:
+    - text: "Where would you like to go?"
+      buttons:
+        - {title: "Paris", payload: '/inform{"destination":"Paris"}'}
+        - {title: "Berlin", payload: '/inform{"destination":"Berlin"}'}
+        - {title: "Amsterdam", payload: '/inform{"destination":"Amsterdam"}'}
+        - {title: "Lisbon", payload: '/inform{"destination":"Lisbon"}'}
+  utter_ask_travel_date:
+    - text: "When do you want to leave? (for example 14 March, or next Friday)"
+  utter_ask_nights:
+    - text: "How many nights will you stay?"
+  utter_ask_budget:
+    - text: "What is your total budget for transport and accommodation? Add a currency if it isn't euros, e.g. £500."
+  utter_ask_sustainability_level:
+    - text: "How much should sustainability weigh in my recommendations?"
+      buttons:
+        - {title: "Price first", payload: '/inform{"sustainability_level":"low"}'}
+        - {title: "Balanced", payload: '/inform{"sustainability_level":"medium"}'}
+        - {title: "Lowest carbon", payload: '/inform{"sustainability_level":"high"}'}
+  utter_offer_more:
+    - text: "Want to change anything (destination, budget, how green to go), or talk to an advisor?"
+      buttons:
+        - {title: "Plan another trip", payload: "/plan_trip"}
+        - {title: "Talk to a human", payload: "/request_human"}
+        - {title: "That's all", payload: "/goodbye"}
+  utter_ask_rephrase:
+    - text: "Sorry, I didn't get that. Could you rephrase it? For example: \"Trip from Berlin to Paris in May\"."
+  utter_fallback_options:
+    - text: "I'm still not sure what you need. Pick one of these:"
+      buttons:
+        - {title: "Plan a trip", payload: "/plan_trip"}
+        - {title: "Greenwashing / privacy FAQ", payload: "/ask_greenwashing"}
+        - {title: "Talk to a human", payload: "/request_human"}
+  utter_ask_handover_consent:
+    - text: "I can pass this conversation (trip details and our recent messages) to a human advisor. Is that OK?"
+      buttons:
+        - {title: "Yes, connect me", payload: "/affirm"}
+        - {title: "No, keep chatting", payload: "/deny"}
+  utter_handover_declined:
+    - text: "No problem, nothing was shared. How else can I help?"
+  utter_greenwashing_faq:
+    - text: "Journey emissions use published average factors per passenger-km (or Climatiq when enabled), rounded, and the source is shown. Hotels are only labelled certified when OpenStreetMap carries a Green Key or ecolabel tag; otherwise I rank by stated proxies like distance to public transport and say they are not certification. Offsets are never counted as reductions."
+  utter_privacy_faq:
+    - text: "I only store what you tell me about the trip, to answer you. I share it with a human advisor only after you agree. You can ask me to restart the conversation at any time; contact the operator to delete your data (GDPR Art. 17)."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: false

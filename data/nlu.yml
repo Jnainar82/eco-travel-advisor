@@ -1,0 +1,238 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hi
+    - hello
+    - hey there
+    - good morning
+    - good evening
+    - hello, anyone there?
+    - hey
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+    - that's allgit
+    - thanks, bye
+    - I'm done
+    - cya
+- intent: affirm
+  examples: |
+    - yes
+    - yeah
+    - sure
+    - ok
+    - okay
+    - yes please
+    - that's fine
+    - go ahead
+    - yes, connect me
+    - correct
+    - absolutely
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - no thanks
+    - not now
+    - don't
+    - no, keep chatting
+    - I'd rather not
+    - negative
+- intent: plan_trip
+  examples: |
+    - I want to plan a trip
+    - plan a trip
+    - help me plan a holiday
+    - I'd like a low-carbon trip
+    - can you help me travel sustainably
+    - I need to book a trip
+    - start a new trip
+    - plan another trip
+    - I'm looking for eco-friendly travel options
+    - I want to go on holiday
+    - help me find a green way to travel
+    - plan a weekend away
+    - I need to travel for work and keep emissions low
+    - let's plan a journey
+    - I want a city break
+    - I'd like a rural eco-tour
+- intent: inform
+  examples: |
+    - I want to go to [Paris](destination)
+    - travelling from [Lisbon](origin) to [Paris](destination)
+    - Paris
+    - from [Paris](origin)
+    - I want to go to [Berlin](destination)
+    - travelling from [Barcelona](origin) to [Berlin](destination)
+    - Berlin
+    - from [Berlin](origin)
+    - I want to go to [Amsterdam](destination)
+    - travelling from [Vienna](origin) to [Amsterdam](destination)
+    - Amsterdam
+    - from [Amsterdam](origin)
+    - I want to go to [Lisbon](destination)
+    - travelling from [Rome](origin) to [Lisbon](destination)
+    - Lisbon
+    - from [Lisbon](origin)
+    - I want to go to [Barcelona](destination)
+    - travelling from [Prague](origin) to [Barcelona](destination)
+    - Barcelona
+    - from [Barcelona](origin)
+    - I want to go to [Vienna](destination)
+    - travelling from [Copenhagen](origin) to [Vienna](destination)
+    - Vienna
+    - from [Vienna](origin)
+    - I want to go to [Rome](destination)
+    - travelling from [Madrid](origin) to [Rome](destination)
+    - Rome
+    - from [Rome](origin)
+    - I want to go to [Prague](destination)
+    - travelling from [London](origin) to [Prague](destination)
+    - Prague
+    - from [Prague](origin)
+    - I want to go to [Copenhagen](destination)
+    - travelling from [Brussels](origin) to [Copenhagen](destination)
+    - Copenhagen
+    - from [Copenhagen](origin)
+    - I want to go to [Madrid](destination)
+    - travelling from [Zurich](origin) to [Madrid](destination)
+    - Madrid
+    - from [Madrid](origin)
+    - I want to go to [London](destination)
+    - travelling from [Edinburgh](origin) to [London](destination)
+    - London
+    - from [London](origin)
+    - I want to go to [Brussels](destination)
+    - travelling from [Duesseldorf](origin) to [Brussels](destination)
+    - Brussels
+    - from [Brussels](origin)
+    - I want to go to [Zurich](destination)
+    - travelling from [Duisburg](origin) to [Zurich](destination)
+    - Zurich
+    - from [Zurich](origin)
+    - I want to go to [Edinburgh](destination)
+    - travelling from [Paris](origin) to [Edinburgh](destination)
+    - Edinburgh
+    - from [Edinburgh](origin)
+    - I want to go to [Duesseldorf](destination)
+    - travelling from [Berlin](origin) to [Duesseldorf](destination)
+    - Duesseldorf
+    - from [Duesseldorf](origin)
+    - I want to go to [Duisburg](destination)
+    - travelling from [Amsterdam](origin) to [Duisburg](destination)
+    - Duisburg
+    - from [Duisburg](origin)
+    - to [Paris](destination)
+    - to [Berlin](destination)
+    - to [Amsterdam](destination)
+    - to [Lisbon](destination)
+    - to [Barcelona](destination)
+    - to [Vienna](destination)
+    - leaving on [14 March](travel_date)
+    - on [next Friday](travel_date)
+    - I leave [tomorrow](travel_date)
+    - around [5 June](travel_date)
+    - departing [2026-07-01](travel_date)
+    - [next month](travel_date)
+    - 14 March
+    - next Friday
+    - in two weeks
+    - 2026-08-15
+    - for [3](nights) nights
+    - staying [4](nights) nights
+    - [2](nights) nights
+    - [7](nights) nights please
+    - a week
+    - 3
+    - 5 nights
+    - my budget is [500](budget) euros
+    - about [800](budget) euros total
+    - budget of [1200](budget)
+    - I can spend [300](budget) euros
+    - [2000](budget) euros
+    - 500
+    - 800 euros
+    - 1500
+    - around 400
+    - [very eco-friendly](sustainability_level:high)
+    - as [green](sustainability_level:high) as possible
+    - [lowest carbon](sustainability_level:high)
+    - I care a lot about [sustainability](sustainability_level:high)
+    - [balanced](sustainability_level:medium)
+    - a [mix](sustainability_level:medium) of price and green
+    - [cheapest](sustainability_level:low) option
+    - [price first](sustainability_level:low)
+    - price matters most
+    - high
+    - medium
+    - low
+    - it's a [city break](trip_type:city_break)
+    - a [rural eco-tour](trip_type:rural_eco_tour)
+    - a [business trip](trip_type:business_trip)
+    - [nature](trip_type:rural_eco_tour) holiday in the countryside
+    - [conference](trip_type:business_trip) next month
+    - [weekend in the city](trip_type:city_break)
+    - [city break](trip_type:city_break) from [Berlin](origin) to [Paris](destination) for [3](nights) nights, budget [600](budget) euros
+    - [business trip](trip_type:business_trip) to [Amsterdam](destination) on [12 May](travel_date), [lowest carbon](sustainability_level:high)
+- intent: share_location
+  examples: |
+    - "/share_location"
+    - use my location
+    - use my current location
+    - detect my location
+    - I am here
+- intent: request_human
+  examples: |
+    - I want to talk to a human
+    - connect me to a human advisor
+    - can I speak to a person
+    - human please
+    - I need a real agent
+    - let me talk to an advisor
+    - get me a human
+    - speak to someone
+    - talk to a human
+    - escalate this to a person
+- intent: ask_greenwashing
+  examples: |
+    - how do I know your data isn't greenwashing
+    - how do you avoid greenwashing
+    - are your emission numbers reliable
+    - where do your carbon figures come from
+    - can I trust the eco labels
+    - how do you verify green hotels
+    - is this really sustainable
+    - what are your data sources
+- intent: ask_privacy
+  examples: |
+    - what do you do with my data
+    - is my data safe
+    - privacy policy
+    - do you store my information
+    - is this GDPR compliant
+    - who can see my conversation
+    - delete my data
+    - what data do you collect
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - am I talking to a human?
+    - are you real?
+    - are you an AI?
+    - who are you
+    - what are you
+- intent: out_of_scope
+  examples: |
+    - what's the weather like on Mars
+    - tell me a joke
+    - who won the football match
+    - what is the meaning of life
+    - order me a pizza
+    - write me a poem
+    - what's the stock price of Tesla
+    - can you do my homework
+    - how do I bake bread
+    - what time is it in Tokyo

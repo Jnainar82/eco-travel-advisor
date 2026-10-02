@@ -1,0 +1,10 @@
+.env
+models/
+__pycache__/
+*.pyc
+.rasa/
+handover_queue.jsonl
+results/
+# Local virtual environments
+.venv/
+rasa-env/

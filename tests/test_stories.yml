@@ -1,0 +1,72 @@
+version: "3.1"
+stories:
+  - story: Full eco-first trip with buttons
+    steps:
+      - user: /plan_trip
+        intent: plan_trip
+      - action: trip_form
+      - active_loop: trip_form
+      - user: /inform{"trip_type":"city_break"}
+        intent: inform
+      - action: trip_form
+      - user: Berlin
+        intent: inform
+      - action: trip_form
+      - user: /inform{"destination":"Paris"}
+        intent: inform
+      - action: trip_form
+      - user: 2026-12-14
+        intent: inform
+      - action: trip_form
+      - user: 3
+        intent: inform
+      - action: trip_form
+      - user: 600
+        intent: inform
+      - action: trip_form
+      - user: /inform{"sustainability_level":"high"}
+        intent: inform
+      - action: trip_form
+      - active_loop: null
+      - action: action_search_options
+      - action: utter_offer_more
+
+  - story: Human handover with consent
+    steps:
+      - user: I want to talk to a human
+        intent: request_human
+      - action: action_deactivate_loop
+      - active_loop: null
+      - action: utter_ask_handover_consent
+      - user: yes please
+        intent: affirm
+      - action: action_handover
+
+  - story: Handover refused
+    steps:
+      - user: human please
+        intent: request_human
+      - action: action_deactivate_loop
+      - active_loop: null
+      - action: utter_ask_handover_consent
+      - user: no thanks
+        intent: deny
+      - action: utter_handover_declined
+
+  - story: Fallback stage 1
+    steps:
+      - user: asdf qwer zxcv
+        intent: nlu_fallback
+      - action: action_default_fallback
+
+  - story: FAQ greenwashing
+    steps:
+      - user: how do you avoid greenwashing
+        intent: ask_greenwashing
+      - action: utter_greenwashing_faq
+
+  - story: Out of scope
+    steps:
+      - user: tell me a joke
+        intent: out_of_scope
+      - action: utter_out_of_scope

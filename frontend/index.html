@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eco-Travel Advisor</title>
+<style>
+:root{--bg:#eef3f2;--panel:#fff;--ink:#14302d;--muted:#58706c;--line:#cfdcd9;--user:#14302d;--userink:#fff;
+--green:#1d7a46;--amber:#a86a00;--red:#b3261e;--focus:#0b57d0;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1a19;--panel:#15262a;--ink:#e3eeec;--muted:#9bb2ae;--line:#2a4046;--user:#cfe8e3;--userink:#0e1a19;
+--green:#5fd18b;--amber:#f0b44c;--red:#ff8a80;--focus:#8ab4f8}}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif;display:flex;justify-content:center}
+main{width:100%;max-width:640px;height:100%;display:flex;flex-direction:column;background:var(--panel);border-inline:1px solid var(--line)}
+header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{font-size:1.05rem;margin:0}
+#human{display:none;padding:6px 16px;font-size:.9rem;border-bottom:1px solid var(--line)}
+#human.on{display:block;border-left:6px solid var(--green)}#human.fail{display:block;border-left:6px solid var(--red)}
+#log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:85%;padding:9px 13px;border-radius:14px;white-space:pre-wrap}
+.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.me{align-self:flex-end;background:var(--user);color:var(--userink)}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+button{font:inherit;cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:6px 12px}
+button:hover{background:var(--ink);color:var(--panel)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.card{border:1px solid var(--line);border-left-width:8px;border-radius:8px;padding:8px 12px;background:var(--panel)}
+.card.green{border-left-color:var(--green)}.card.amber{border-left-color:var(--amber)}.card.red{border-left-color:var(--red)}.card.grey{border-left-color:var(--muted)}
+.tag{font-weight:600}.green .tag{color:var(--green)}.amber .tag{color:var(--amber)}.red .tag{color:var(--red)}
+.row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}.row .card{min-width:220px;max-width:260px}.card a{color:var(--focus);font-size:.9rem}
+.alert{border:2px solid var(--red);border-radius:8px;padding:8px 12px;color:var(--red);font-weight:600}
+small{color:var(--muted)}
+form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+input{flex:1;font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+@media(prefers-reduced-motion:no-preference){#log{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<main>
+  <header><h1>Eco-Travel Advisor</h1>
+    <button id="geo" type="button" aria-label="Use my current location as departure city">Use my location</button></header>
+  <div id="human" role="status"></div>
+  <div id="log" role="log" aria-live="polite" aria-label="Conversation"></div>
+  <form id="f"><label for="t" hidden>Your message</label>
+    <input id="t" autocomplete="off" placeholder="Type a message" required>
+    <button type="submit">Send</button></form>
+</main>
+<script>
+// Relative URL works behind nginx (Docker/HF). For local dev set: window.RASA_URL="http://localhost:5005/webhooks/rest/webhook"
+const URL_ = window.RASA_URL || "/webhooks/rest/webhook";
+const sender = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now());
+const log = document.getElementById("log"), human = document.getElementById("human");
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+const add = (node) => { log.appendChild(node); log.scrollTop = log.scrollHeight; };
+const label = { green: "Low carbon", amber: "Medium carbon", red: "High carbon" };
+
+function send(text, shown) {
+  if (shown !== false) add(el("div", "m me", shown || text));
+  fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sender, message: text }) })
+    .then(r => { if (!r.ok) throw 0; return r.json(); })
+    .then(msgs => msgs.forEach(render))
+    .catch(() => add(el("div", "m bot", "I can't reach the server right now. Please try again in a moment.")));
+}
+function render(m) {
+  if (m.custom) return renderCustom(m.custom);
+  if (!m.text) return;
+  const box = el("div", "m bot", m.text);
+  if (m.buttons) { const b = el("div", "btns"); m.buttons.forEach(x => { const btn = el("button", "", x.title); btn.type = "button";
+    btn.onclick = () => { b.querySelectorAll("button").forEach(y => y.disabled = true); send(x.payload, x.title); }; b.appendChild(btn); }); box.appendChild(b); }
+  add(box);
+}
+function renderCustom(c) {
+  if (c.type === "handover") { human.className = c.state === "connected" ? "on" : "fail";
+    human.textContent = c.state === "connected" ? "Connected to a human advisor" : "Human advisor unavailable"; return; }
+  if (c.type === "alert") return add(el("div", "alert", c.text));
+  if (c.type !== "cards") return;
+  const wrap = el("div", "row");
+  c.items.forEach(it => { const k = el("div", "card " + it.band);
+    k.append(el("div", "tag", it.label + ": " + it.title));
+    (it.lines || []).forEach(l => k.appendChild(el("div", "", l)));
+    if (it.small) k.appendChild(el("small", "", it.small));
+    if (it.url && /^https:\/\//.test(it.url)) { const a = el("a", "", "Read more on Wikipedia"); a.href = it.url; a.target = "_blank"; a.rel = "noopener"; k.appendChild(a); }
+    wrap.appendChild(k); });
+  add(wrap);
+}
+document.getElementById("f").onsubmit = e => { e.preventDefault(); const t = document.getElementById("t"); send(t.value); t.value = ""; };
+document.getElementById("geo").onclick = () => {
+  if (!navigator.geolocation) return add(el("div", "m bot", "Location isn't available in this browser. Please type your city."));
+  navigator.geolocation.getCurrentPosition(
+    p => send('/share_location{"lat":"' + p.coords.latitude.toFixed(3) + '","lon":"' + p.coords.longitude.toFixed(3) + '"}', "Use my location"),
+    () => add(el("div", "m bot", "Location permission was denied. Please type your departure city.")), { timeout: 5000 });
+};
+send("/greet", false);
+</script>
+</body>
+</html>

@@ -1,10 +1,12 @@
-.env
-models/
+@"
+.venv/
+venv/
 __pycache__/
 *.pyc
 .rasa/
-handover_queue.jsonl
+models/
+.env
+*.db
 results/
-# Local virtual environments
-.venv/
-rasa-env/
+handover_queue.jsonl
+"@ | Set-Content .gitignore -Encoding ascii

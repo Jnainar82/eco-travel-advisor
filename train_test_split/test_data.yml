@@ -1,0 +1,95 @@
+version: "3.1"
+nlu:
+- intent: share_location
+  examples: |
+    - use my current location
+- intent: bot_challenge
+  examples: |
+    - are you real?
+    - are you an AI?
+- intent: greet
+  examples: |
+    - hello
+- intent: goodbye
+  examples: |
+    - bye
+- intent: deny
+  examples: |
+    - no
+    - no thanks
+- intent: ask_greenwashing
+  examples: |
+    - is this really sustainable
+    - how do you avoid greenwashing
+- intent: ask_privacy
+  examples: |
+    - what data do you collect
+- intent: request_human
+  examples: |
+    - I want to talk to a human
+    - I need a real agent
+- intent: out_of_scope
+  examples: |
+    - what's the stock price of Tesla
+    - what is the meaning of life
+- intent: affirm
+  examples: |
+    - okay
+    - yes please
+- intent: plan_trip
+  examples: |
+    - I want a city break
+    - help me plan a holiday
+    - can you help me travel sustainably
+    - I need to travel for work and keep emissions low
+- intent: inform
+  examples: |
+    - 500
+    - travelling from [Brussels](origin) to [Copenhagen](destination)
+    - staying [4](nights) nights
+    - travelling from [Lisbon](origin) to [Paris](destination)
+    - [7](nights) nights please
+    - [conference]{"entity": "trip_type", "value": "business_trip"} next month
+    - price matters most
+    - I want to go to [Zurich](destination)
+    - Berlin
+    - about [800](budget) euros total
+    - from [Madrid](origin)
+    - Vienna
+    - 5 nights
+    - from [Copenhagen](origin)
+    - [2](nights) nights
+    - from [Prague](origin)
+    - I want to go to [London](destination)
+    - travelling from [Prague](origin) to [Barcelona](destination)
+    - Copenhagen
+    - on [next Friday](travel_date)
+    - [price first]{"entity": "sustainability_level", "value": "low"}
+    - [next month](travel_date)
+    - London
+- synonym: high
+  examples: |
+    - very eco-friendly
+    - green
+    - lowest carbon
+    - sustainability
+- synonym: medium
+  examples: |
+    - balanced
+    - mix
+- synonym: low
+  examples: |
+    - cheapest
+    - price first
+- synonym: city_break
+  examples: |
+    - city break
+    - weekend in the city
+- synonym: rural_eco_tour
+  examples: |
+    - rural eco-tour
+    - nature
+- synonym: business_trip
+  examples: |
+    - business trip
+    - conference

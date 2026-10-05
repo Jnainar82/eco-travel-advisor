@@ -1,0 +1,221 @@
+version: "3.1"
+nlu:
+- intent: share_location
+  examples: |
+    - use my location
+    - "/share_location"
+    - detect my location
+    - I am here
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - am I talking to a human?
+    - what are you
+    - who are you
+- intent: greet
+  examples: |
+    - good morning
+    - hello, anyone there?
+    - hey
+    - good evening
+    - hi
+    - hey there
+- intent: goodbye
+  examples: |
+    - I'm done
+    - cya
+    - that's allgit
+    - goodbye
+    - thanks, bye
+    - see you later
+- intent: deny
+  examples: |
+    - don't
+    - I'd rather not
+    - not now
+    - nope
+    - no, keep chatting
+    - negative
+- intent: ask_greenwashing
+  examples: |
+    - how do you verify green hotels
+    - can I trust the eco labels
+    - are your emission numbers reliable
+    - how do I know your data isn't greenwashing
+    - where do your carbon figures come from
+    - what are your data sources
+- intent: ask_privacy
+  examples: |
+    - is my data safe
+    - do you store my information
+    - delete my data
+    - who can see my conversation
+    - is this GDPR compliant
+    - what do you do with my data
+    - privacy policy
+- intent: request_human
+  examples: |
+    - connect me to a human advisor
+    - talk to a human
+    - speak to someone
+    - get me a human
+    - let me talk to an advisor
+    - can I speak to a person
+    - human please
+    - escalate this to a person
+- intent: out_of_scope
+  examples: |
+    - can you do my homework
+    - order me a pizza
+    - what's the weather like on Mars
+    - how do I bake bread
+    - write me a poem
+    - what time is it in Tokyo
+    - who won the football match
+    - tell me a joke
+- intent: affirm
+  examples: |
+    - absolutely
+    - yes, connect me
+    - go ahead
+    - yeah
+    - that's fine
+    - sure
+    - yes
+    - correct
+    - ok
+- intent: plan_trip
+  examples: |
+    - let's plan a journey
+    - plan a weekend away
+    - I'm looking for eco-friendly travel options
+    - start a new trip
+    - I need to book a trip
+    - plan a trip
+    - I'd like a low-carbon trip
+    - plan another trip
+    - help me find a green way to travel
+    - I'd like a rural eco-tour
+    - I want to plan a trip
+    - I want to go on holiday
+- intent: inform
+  examples: |
+    - 14 March
+    - [weekend in the city]{"entity": "trip_type", "value": "city_break"}
+    - I leave [tomorrow](travel_date)
+    - to [Lisbon](destination)
+    - I want to go to [Copenhagen](destination)
+    - I can spend [300](budget) euros
+    - from [Edinburgh](origin)
+    - travelling from [Duisburg](origin) to [Zurich](destination)
+    - from [London](origin)
+    - Edinburgh
+    - travelling from [Barcelona](origin) to [Berlin](destination)
+    - Madrid
+    - I want to go to [Amsterdam](destination)
+    - Lisbon
+    - from [Vienna](origin)
+    - high
+    - [city break]{"entity": "trip_type", "value": "city_break"} from [Berlin](origin) to [Paris](destination) for [3](nights) nights, budget [600](budget) euros
+    - from [Duisburg](origin)
+    - I want to go to [Lisbon](destination)
+    - 3
+    - it's a [city break]{"entity": "trip_type", "value": "city_break"}
+    - a [business trip]{"entity": "trip_type", "value": "business_trip"}
+    - travelling from [Amsterdam](origin) to [Duisburg](destination)
+    - [business trip]{"entity": "trip_type", "value": "business_trip"} to [Amsterdam](destination) on [12 May](travel_date), [lowest carbon]{"entity": "sustainability_level", "value": "high"}
+    - [very eco-friendly]{"entity": "sustainability_level", "value": "high"}
+    - budget of [1200](budget)
+    - as [green]{"entity": "sustainability_level", "value": "high"} as possible
+    - I care a lot about [sustainability]{"entity": "sustainability_level", "value": "high"}
+    - [lowest carbon]{"entity": "sustainability_level", "value": "high"}
+    - [balanced]{"entity": "sustainability_level", "value": "medium"}
+    - I want to go to [Barcelona](destination)
+    - I want to go to [Vienna](destination)
+    - travelling from [Rome](origin) to [Lisbon](destination)
+    - I want to go to [Duesseldorf](destination)
+    - a week
+    - Brussels
+    - I want to go to [Prague](destination)
+    - to [Berlin](destination)
+    - Zurich
+    - Rome
+    - I want to go to [Berlin](destination)
+    - from [Barcelona](origin)
+    - a [mix]{"entity": "sustainability_level", "value": "medium"} of price and green
+    - to [Vienna](destination)
+    - I want to go to [Brussels](destination)
+    - I want to go to [Paris](destination)
+    - 2026-08-15
+    - travelling from [London](origin) to [Prague](destination)
+    - a [rural eco-tour]{"entity": "trip_type", "value": "rural_eco_tour"}
+    - from [Lisbon](origin)
+    - 800 euros
+    - from [Amsterdam](origin)
+    - from [Brussels](origin)
+    - Prague
+    - medium
+    - Duisburg
+    - from [Rome](origin)
+    - travelling from [Zurich](origin) to [Madrid](destination)
+    - [nature]{"entity": "trip_type", "value": "rural_eco_tour"} holiday in the countryside
+    - from [Berlin](origin)
+    - Amsterdam
+    - my budget is [500](budget) euros
+    - I want to go to [Madrid](destination)
+    - to [Amsterdam](destination)
+    - travelling from [Copenhagen](origin) to [Vienna](destination)
+    - to [Barcelona](destination)
+    - around 400
+    - I want to go to [Edinburgh](destination)
+    - around [5 June](travel_date)
+    - to [Paris](destination)
+    - [2000](budget) euros
+    - travelling from [Edinburgh](origin) to [London](destination)
+    - travelling from [Vienna](origin) to [Amsterdam](destination)
+    - from [Zurich](origin)
+    - Barcelona
+    - low
+    - travelling from [Paris](origin) to [Edinburgh](destination)
+    - travelling from [Berlin](origin) to [Duesseldorf](destination)
+    - departing [2026-07-01](travel_date)
+    - 1500
+    - travelling from [Madrid](origin) to [Rome](destination)
+    - leaving on [14 March](travel_date)
+    - [cheapest]{"entity": "sustainability_level", "value": "low"} option
+    - Duesseldorf
+    - next Friday
+    - for [3](nights) nights
+    - Paris
+    - travelling from [Duesseldorf](origin) to [Brussels](destination)
+    - in two weeks
+    - from [Duesseldorf](origin)
+    - I want to go to [Duisburg](destination)
+    - from [Paris](origin)
+    - I want to go to [Rome](destination)
+- synonym: high
+  examples: |
+    - very eco-friendly
+    - green
+    - lowest carbon
+    - sustainability
+- synonym: medium
+  examples: |
+    - balanced
+    - mix
+- synonym: low
+  examples: |
+    - cheapest
+    - price first
+- synonym: city_break
+  examples: |
+    - city break
+    - weekend in the city
+- synonym: rural_eco_tour
+  examples: |
+    - rural eco-tour
+    - nature
+- synonym: business_trip
+  examples: |
+    - business trip
+    - conference
